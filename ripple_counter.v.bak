@@ -1,0 +1,41 @@
+// 4-bit Ripple Counter (Asynchronous Counter)
+module ripple_counter (
+    input clk,       // Clock input
+    input reset,     // Asynchronous reset
+    output [3:0] q   // 4-bit counter output
+);
+
+    // Toggle flip-flops
+    always @(posedge clk or posedge reset)
+    begin
+        if (reset)
+            q <= 4'b0000;         // Reset counter to 0
+        else
+            q[0] <= ~q[0];        // Toggle LSB
+    end
+
+    always @(posedge q[0] or posedge reset)
+    begin
+        if (reset)
+            q[1] <= 1'b0;
+        else
+            q[1] <= ~q[1];        // Toggle next bit on q[0] edge
+    end
+
+    always @(posedge q[1] or posedge reset)
+    begin
+        if (reset)
+            q[2] <= 1'b0;
+        else
+            q[2] <= ~q[2];
+    end
+
+    always @(posedge q[2] or posedge reset)
+    begin
+        if (reset)
+            q[3] <= 1'b0;
+        else
+            q[3] <= ~q[3];
+    end
+
+endmodule
